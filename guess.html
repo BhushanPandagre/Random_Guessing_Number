@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 90%;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .hint {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Number Guessing Game</h2>
+    <form id="maxForm">
+        <label for="max">Enter the maximum number:</label><br>
+        <input type="text" id="max" name="max" required><br>
+        <input type="submit" value="Start Game">
+    </form>
+    <form id="guessForm" style="display: none;">
+        <label for="guess">Enter your guess:</label><br>
+        <input type="text" id="guess" name="guess" required><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="message" class="message"></div>
+</div>
+
+<script>
+    const maxForm = document.getElementById('maxForm');
+    const guessForm = document.getElementById('guessForm');
+    const message = document.getElementById('message');
+    let maxNumber;
+    let random;
+
+    maxForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        maxNumber = parseInt(document.getElementById('max').value);
+        if (isNaN(maxNumber)) {
+            message.textContent = 'Please enter a valid number.';
+            return;
+        }
+        random = Math.floor(Math.random() * maxNumber) + 1;
+        maxForm.style.display = 'none';
+        guessForm.style.display = 'block';
+        guessForm.querySelector('input[type="text"]').focus();
+    });
+
+    guessForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const guessInput = parseInt(document.getElementById('guess').value);
+        if (isNaN(guessInput)) {
+            message.textContent = 'Please enter a valid number.';
+            return;
+        }
+        if (guessInput === random) {
+            message.textContent = `Congratulations! You guessed it right. The random number was ${random}`;
+        } else if (guessInput < random) {
+            message.innerHTML = 'Hint: Your guess was too small. Try again. <span class="hint">(Hint: The number is greater than your guess)</span>';
+        } else {
+            message.innerHTML = 'Hint: Your guess was too large. Try again. <span class="hint">(Hint: The number is smaller than your guess)</span>';
+        }
+    });
+</script>
+
+</body>
+</html>
